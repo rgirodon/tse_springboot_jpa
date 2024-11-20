@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tse.fise3.springboot_jpa.model.Course;
 import org.tse.fise3.springboot_jpa.model.CulturalOption;
 import org.tse.fise3.springboot_jpa.model.Student;
+import org.tse.fise3.springboot_jpa.model.Teacher;
 import org.tse.fise3.springboot_jpa.repository.CourseRepository;
 import org.tse.fise3.springboot_jpa.repository.CulturalOptionRepository;
 import org.tse.fise3.springboot_jpa.repository.StudentRepository;
+import org.tse.fise3.springboot_jpa.repository.TeacherRepository;
 import org.tse.fise3.springboot_jpa.service.SchoolService;
 
 @Transactional
@@ -25,6 +27,9 @@ public class SchoolServiceImpl implements SchoolService {
 	
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	@Autowired
+	private TeacherRepository teacherRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -95,6 +100,25 @@ public class SchoolServiceImpl implements SchoolService {
 	public void deleteStudent(Student student) {
 		
 		this.studentRepository.delete(student);
+	}
+
+	@Override
+	public void persistTeacher(Teacher teacher) {
+		
+		this.teacherRepository.save(teacher);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Teacher> findAllTeachers() {
+		
+		return this.teacherRepository.findAll();
+	}
+
+	@Override
+	public void deleteTeacher(Teacher teacher) {
+		
+		this.teacherRepository.delete(teacher);
 	}
 	
 	

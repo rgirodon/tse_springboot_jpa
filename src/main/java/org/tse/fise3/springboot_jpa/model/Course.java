@@ -8,7 +8,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Course {
@@ -18,6 +20,10 @@ public class Course {
     private Long id;
     
     private String name;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
     
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "courses")
     private List<Student> students;
@@ -63,5 +69,13 @@ public class Course {
 
 	public void setStudents(List<Student> students) {
 		this.students = students;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 }

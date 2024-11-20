@@ -1,6 +1,7 @@
 package org.tse.fise3.springboot_jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.tse.fise3.springboot_jpa.model.Course;
 import org.tse.fise3.springboot_jpa.model.CulturalOption;
 import org.tse.fise3.springboot_jpa.model.Student;
+import org.tse.fise3.springboot_jpa.model.Teacher;
 import org.tse.fise3.springboot_jpa.service.SchoolService;
 
 @SpringBootTest
@@ -60,16 +62,27 @@ public class SchoolServiceTest {
 	
 	private void createDefaultCourses() {
 		
+		Teacher teacher1 = new Teacher();
+		teacher1.setName("Christophe Gravier");
+		this.schoolService.persistTeacher(teacher1);
+		
+		Teacher teacher2 = new Teacher();
+		teacher2.setName("Kamal Singh");
+		this.schoolService.persistTeacher(teacher2);
+		
 		Course course1 = new Course();
 		course1.setName("Computer Science");
+		course1.setTeacher(teacher1);
 		this.schoolService.persistCourse(course1);
 		
 		Course course2 = new Course();
 		course2.setName("Network");
+		course2.setTeacher(teacher2);
 		this.schoolService.persistCourse(course2);
 		
 		Course course3 = new Course();
 		course3.setName("Data Science");
+		course3.setTeacher(teacher1);
 		this.schoolService.persistCourse(course3);		
 	}
 	
@@ -77,6 +90,11 @@ public class SchoolServiceTest {
 		List<Course> courses = this.schoolService.findAllCourses();
 		for (Course course : courses) {
 			this.schoolService.deleteCourse(course);
+		}
+		
+		List<Teacher> teachers = this.schoolService.findAllTeachers();
+		for (Teacher teacher : teachers) {
+			this.schoolService.deleteTeacher(teacher);
 		}
 	}
 		
@@ -105,6 +123,22 @@ public class SchoolServiceTest {
 		assertEquals("Rémy Girodon", studentFound.getName());
 		assertEquals("Painting", studentFound.getCulturalOption().getName());
 		assertEquals(2, studentFound.getCourses().size());
+		
+		boolean networkFound = false;
+		
+		for (Course studentCourse : studentFound.getCourses()) {
+			
+			if ("Network".equals(studentCourse.getName())) {
+				
+				networkFound = true;
+				
+				assertEquals("Kamal Singh", studentCourse.getTeacher().getName());
+			}
+		}
+		
+		if (!networkFound) {
+			fail("Student not inscribed to Network course !");
+		}
 		
 		this.schoolService.deleteStudent(studentFound);
 		

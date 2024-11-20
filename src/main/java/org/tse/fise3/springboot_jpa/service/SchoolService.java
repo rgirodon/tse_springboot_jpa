@@ -5,6 +5,7 @@ import java.util.List;
 import org.tse.fise3.springboot_jpa.model.Course;
 import org.tse.fise3.springboot_jpa.model.CulturalOption;
 import org.tse.fise3.springboot_jpa.model.Student;
+import org.tse.fise3.springboot_jpa.model.Teacher;
 
 public interface SchoolService {
 
@@ -29,5 +30,11 @@ public interface SchoolService {
 	List<Student> findAllStudents();
 
 	void deleteStudent(Student student);
+
+	void persistTeacher(Teacher teacher);
+
+	List<Teacher> findAllTeachers();
+
+	void deleteTeacher(Teacher teacher);
 
 }
